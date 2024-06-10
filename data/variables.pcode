@@ -3,6 +3,6 @@ A <-- -5
 DECLARE B : BOOLEAN
 B <-- TRUE
 DECLARE C : REAL
-C <-- (3.14)
+C <-- 3.14
 DECLARE D : STRING
 D <-- "John"

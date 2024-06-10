@@ -187,7 +187,10 @@ std::string Semantic_Analyser::typecheck_expression(Node* node)
     };
 
     // base case
-    if (node->get_node_name() == AST_Node_Names::LITERAL || node->get_node_name() == AST_Node_Names::IDENTIFIER || node->get_node_name() == AST_Node_Names::FUNCTION_CALL || node->get_node_name() == AST_Node_Names::ARRAY_EXPRESSION)
+    if (node->get_node_name() == AST_Node_Names::LITERAL 
+        || node->get_node_name() == AST_Node_Names::IDENTIFIER 
+        || node->get_node_name() == AST_Node_Names::FUNCTION_CALL 
+        || node->get_node_name() == AST_Node_Names::ARRAY_EXPRESSION)
     {
         // return value of literal or datatype of function call or datatype of identifier
         if (node->get_node_name() == AST_Node_Names::LITERAL)
@@ -251,7 +254,7 @@ std::string Semantic_Analyser::typecheck_expression(Node* node)
             expressionType = types[0];
         }
     }
-    else if (node->get_node_name()== AST_Node_Names::UNARY_EXPRESSION)
+    else if (node->get_node_name() == AST_Node_Names::UNARY_EXPRESSION)
     {
         Token operation = static_cast<Unary_Expression*>(node)->get_operator();
         std::vector<std::string> types = {typecheck_expression(static_cast<Unary_Expression*>(node)->get_expression())};
@@ -268,7 +271,7 @@ std::string Semantic_Analyser::typecheck_expression(Node* node)
     }
     else if (node->get_node_name() == AST_Node_Names::BRACKETED_EXPRESSION)
     {
-        typecheck_expression(static_cast<Bracketed_Expression*>(node)->get_expression());
+        return typecheck_expression(static_cast<Bracketed_Expression*>(node)->get_expression());
     }
     return expressionType;
 }

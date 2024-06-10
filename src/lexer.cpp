@@ -119,7 +119,7 @@ Token Lexer::lookahead(std::string character)
 void Lexer::advance()
 {
     this->position++;
-    if (this->position >= (int)this->currentLine.length() || this->position == -1) // check if reached end of line
+    if (this->position == -1 || this->position >= (int)this->currentLine.length()) // check if reached end of line
     {
         this->position = -1;
     }
@@ -149,11 +149,12 @@ Token Lexer::get_keyword_or_identifier(void)
     Token token = Token();
     std::string buffer = {this->currentLine[this->position]};
     advance();
-    while (is_alphanumeric({this->currentLine[this->position]}) && this->position != -1)
+    while (this->position != -1 && is_alphanumeric({this->currentLine[this->position]}))
     {
         buffer = buffer + this->currentLine[this->position];
         advance();
     }
+    
     if (this->KEYWORDS_TO_TOKENS.count(buffer))
     {
         token.type = this->KEYWORDS_TO_TOKENS.at(buffer);
@@ -180,16 +181,20 @@ Token Lexer::get_numerical_literal(void)
     // get either a float or integer literal depending on the presence of a decimal point
     std::string type = Tokens::INTEGER_LITERAL;
     std::string number;
-    std::string character = {this->currentLine[this->position]};
-    while ((is_integer(character) || character == ".") && this->position != -1)
+    while (this->position != -1)
     {
+        std::string character = {this->currentLine[this->position]};
+        if (!(is_integer(character) || character == ".")) 
+        {
+            break;
+        }
+
         if (character == ".")
         {
             type = Tokens::FLOAT_LITERAL;
         }
         number = number + character;
         advance();
-        character = this->currentLine[this->position];
     }
     this->position--;
     Token token(type, number);
